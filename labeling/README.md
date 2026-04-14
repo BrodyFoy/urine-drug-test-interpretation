@@ -1,13 +1,13 @@
 # Urine Drug Screen Interpretation Labeling Tool
 
-Standalone command-line tool for automatically labeling urine drug screen
+Tool for automatically labeling urine drug screen
 interpretation text. Uses a DeBERTa-based zero-shot classifier
 (`MoritzLaurer/deberta-v3-large-zeroshot-v1.1-all-33`) to assign a per-substance
 numeric label to each interpretation.
 
-This tool is intended to run after `interpret/interpret.py` has generated
-interpretation text, and produces a labeled dataset suitable for model training
-or evaluation.
+This tool is intended to run using clinically generated interpretations for UDTs, 
+to generate training data for the models used in the interpret function. 
+However, to test functionality, use label.py to first generate interpretations for the
 
 ---
 
@@ -84,10 +84,10 @@ The output CSV contains all original columns plus:
 
 | Value | Meaning |
 |---|---|
-| `0` | Negative / no evidence for use |
-| `1` | Positive / consistent with prescribed therapy / evidence for use |
-| `2` | False positive (immunoassay only, not confirmed) |
-| `3` | Distant or low-dose use (sub-LOQ metabolites) |
+| `0` | Negative |
+| `1` | Positive |
+| `2` | False positive |
+| `3` | Distant use |
 
 ### Full substance code list
 
@@ -95,15 +95,3 @@ The output CSV contains all original columns plus:
 `Z_COD`, `Z_DIAZ`, `Z_FENT`, `Z_HCOD`, `Z_HER`, `Z_HMOR`, `Z_LORA`, `Z_MAMP`,
 `Z_MDMA`, `Z_METH`, `Z_MORP`, `Z_MPH`, `Z_OCOD`, `Z_OXYM`, `Z_POXY`, `Z_TRAM`,
 `Z_TEMA`
-
----
-
-## Notes
-
-- Processing speed: approximately 1–3 rows per minute on CPU, depending on
-  interpretation length and number of substances mentioned.
-- The tool writes output incrementally (one row at a time), so a partial output
-  file is valid up to the last completed row. Use `--start-offset` to resume.
-- The `Z_INVALID` flag uses a secondary zero-shot pass comparing
-  "adulterated sample" vs "valid sample". It may occasionally misfire on
-  interpretations that mention false positives.
