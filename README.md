@@ -26,10 +26,7 @@ pip install -r requirements.txt
 ## Usage (Interpreter)
 
 ```bash
-python interpret.py \
-    --input   cases.csv \
-    --output  interpretations.csv \
-    --models  models
+python interpret/interpret.py --input synthetic_cases.csv --output interpretations.csv --models  interpret/models
 ```
 
 | Argument | Required | Default | Description |
