@@ -1,0 +1,6 @@
+torch>=2.0
+transformers>=4.30
+thefuzz>=0.19
+nltk>=3.8
+pandas>=1.5
+colorama>=0.4
