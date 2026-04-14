@@ -33,6 +33,12 @@ import sys
 import os
 import pandas as pd
 
+# Ensure the bundled classifier/ package takes priority over any installed
+# version of the same name, regardless of the working directory.
+_HERE = os.path.dirname(os.path.abspath(__file__))
+if _HERE not in sys.path:
+    sys.path.insert(0, _HERE)
+
 # Import classifier scripts
 from classifier.predict import load_models, predict          
 from classifier.preprocess import preprocess                
@@ -72,10 +78,15 @@ def main():
     # ------------------------------------------------------------------
     print(f"Reading {args.input} ...")
     data = pd.read_csv(args.input, dtype=str)
-    # Convert numeric columns to float; leave UEXPD as string
+    # Convert numeric columns to float; leave UEXPD and UBATT as strings.
+    # pd.to_numeric errors="ignore" was removed in pandas 2.0, so use try/except
+    # to replicate the same behaviour: leave non-numeric columns unchanged.
     for col in data.columns:
-        if col != "UEXPD":
-            data[col] = pd.to_numeric(data[col], errors="ignore")
+        if col not in ("UEXPD", "UBATT"):
+            try:
+                data[col] = pd.to_numeric(data[col])
+            except (ValueError, TypeError):
+                pass
     print(f"  {len(data):,} rows, {len(data.columns)} columns\n")
 
     interpretations = []
