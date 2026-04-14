@@ -43,7 +43,7 @@ The output CSV contains all original columns plus an added `Interpretation` colu
 ---
 
 ## Usage (Labeler)
-python label.py --csv --interpretations.csv --interp-colname Interpretation 
+```python label.py --csv --interpretations.csv --interp-colname Interpretation ```
 
 ## Test results data structure
 
@@ -116,9 +116,9 @@ opioids"*) rather than remaining silent.
 
 ## Synthetic data
 To test the code base, use the file synthetic_data.csv. First run:
-python interpret.py --input synthetic_cases.csv --output interpretations.csv --models  models
+```python interpret.py --input synthetic_cases.csv --output interpretations.csv --models  models```
 to generate interpretations.
 
 Then run: 
-python label.py --csv --interpretations.csv --interp-colname Interpretation 
+```python label.py --csv --interpretations.csv --interp-colname Interpretation ```
 to convert the interpretations to quantitative targets
