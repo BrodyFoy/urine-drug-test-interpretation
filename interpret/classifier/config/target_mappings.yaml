@@ -1,0 +1,361 @@
+# This file provides details about the substances that the model covers
+# Each substance is tagged with data, about its display name, whether its
+# considered a prescribable substance, what the related expected drug mapping code is,
+# and what the associated screening or confirmatory tests are
+# The way a substance positivity is interpreted is dependent on all these aspects.
+# I.e., If a test has a non-specific positive on the amphetamines immunoassay, this may
+# be interpreted as a specific positive for methamphetamine, if the provider expected this
+# substance, and no confirmatory testing was performed, otherwise it may be interpreted as
+# generically positive for amphetamines.
+
+# These map targets (outputs) from the ML model
+# to actual substances and their respective test codes
+targets:
+  Z_ALC:
+    expected: MALCO
+    category: Alcohol
+    display_name: Alcohol
+    is_pharmaceutical: false
+    # This flag can be added to any substance and will:
+    # regardless of it's positive/negative status, only
+    # include it in the final interpretation if it is expected
+    # or a code override was added for it
+    no_implicit_include: true
+    screen:
+      - UETOH
+      - UETG
+    confirm: []
+
+  Z_ALPR:
+    expected: MALPR
+    category: Benzodiazepines
+    display_name: Alprazolam
+    is_pharmaceutical: true
+    screen:
+      - UBNZQL
+    confirm:
+      - UAHALP
+
+  Z_AMP:
+    expected: MAMPH
+    secondary_expected:
+      - MAMP # not used by model
+    category: Amphetamines
+    display_name: Amphetamine
+    is_pharmaceutical: true
+    # we use transfer names to ensure
+    # these are copied from UEXPD to the final interp
+    transfer_names:
+      - Adderall
+      - Lisdexamfetamine
+    screen:
+      - UAMTQL
+      - UQLAMP
+    confirm:
+      - UAMP
+
+  Z_BARB:
+    expected: MBARB
+    category: Barbiturates
+    display_name: Barbiturates
+    is_pharmaceutical: true
+    screen:
+      - UBRBQL
+      - UQLBAR
+    confirm: []
+
+  Z_BUPR:
+    expected: MBPRN
+    category: Opioids
+    display_name: Buprenorphine
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+      - UBUPQL
+    confirm:
+      - UBUPR
+      - UNBUPG
+
+  Z_CANB:
+    expected: MMARI
+    category: Cannabinoids
+    display_name: Cannabinoids
+    is_pharmaceutical: false
+    screen:
+      - UTHCQL
+    confirm: []
+
+  Z_CLON:
+    expected: MCLON
+    category: Benzodiazepines
+    display_name: Clonazepam
+    is_pharmaceutical: true
+    screen:
+      - UBNZQL
+    confirm:
+      - U7ACZ
+
+  Z_COC:
+    expected: MCOCA
+    category: Cocaine
+    display_name: Cocaine
+    is_pharmaceutical: false
+    screen:
+      - UCOCQL
+      - UQLCOC
+    confirm: []
+
+  Z_COD:
+    expected: MCODN
+    category: Opioids
+    display_name: Codeine
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+    confirm:
+      - UCOD
+      - UCOD6G
+
+  Z_DIAZ:
+    expected: MDIAZ
+    category: Benzodiazepines
+    display_name: Diazepam
+    is_pharmaceutical: true
+    screen:
+      - UBNZQL
+    confirm:
+      - UNDAZ
+
+  Z_FENT:
+    expected: MFENT
+    category: Opioids
+    display_name: Fentanyl
+    is_pharmaceutical: false
+    screen:
+      - UOPIQL
+      - UFENQL
+    confirm:
+      - UFENT
+      - UFENTM
+
+  Z_HCOD:
+    expected: MHCOD
+    category: Opioids
+    display_name: Hydrocodone
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+    confirm:
+      - UHCOD
+      - UNHCOD
+
+  Z_HER:
+    expected: MHERO
+    category: Opioids
+    display_name: Heroin
+    is_pharmaceutical: false
+    screen:
+      - UOPIQL
+    confirm: []
+
+  Z_HMOR:
+    expected: MHMOR
+    category: Opioids
+    display_name: Hydromorphone
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+    confirm:
+      - UHMOR
+      - UHMORG
+
+  Z_LORA:
+    expected: MLORA
+    category: Benzodiazepines
+    display_name: Lorazepam
+    is_pharmaceutical: true
+    screen:
+      - UBNZQL
+    confirm:
+      - ULORZ
+
+  Z_MAMP:
+    expected: MAMPH
+    secondary_expected:
+      - MMAMP 
+    category: Amphetamines
+    display_name: Methamphetamine
+    is_pharmaceutical: false
+    screen:
+      - UAMTQL
+    confirm:
+      - UMA
+
+  Z_METH:
+    expected: MMETH
+    category: Opioids
+    display_name: Methadone
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+      - UMDNQL
+      - UQLMTD
+    confirm:
+      - UMETH
+
+  Z_MORP:
+    expected: MMORP
+    category: Opioids
+    display_name: Morphine
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+    confirm:
+      - UMOR3G
+      - UMOR6
+      - UMOR6G
+      - UMORPH
+
+  Z_MPH:
+    expected: MMPHEN
+    category: Amphetamines
+    display_name: Methylphenidate
+    is_pharmaceutical: true
+    transfer_names:
+      - Ritalin
+    screen:
+      - UAMTQL
+    confirm:
+      - URITAL
+
+  Z_OCOD:
+    expected: MOXYC
+    category: Opioids
+    display_name: Oxycodone
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+      - UOXCQL
+      - UQLOXY
+    confirm:
+      - UOXCD
+
+  Z_TEMA:
+    expected: MTEMA
+    category: Benzodiazepines
+    display_name: Temazepam
+    is_pharmaceutical: true
+    screen:
+      - UBNZQL
+    confirm:
+      - UTEMZ
+
+  Z_TRAM:
+    expected: MTRAM
+    category: Opioids
+    display_name: Tramadol
+    is_pharmaceutical: true
+    screen:
+      - UOPIQL
+      - UTRAQL
+    confirm:
+      - UTRMQL
+
+## These are the same as above, but for categories, instead of specific substances
+category_targets:
+  Z_CAT_OPIOIDS:
+    expected:
+      - MOPIA
+      # these are here becauase we have insufficient training data for the specific substances
+      - MOXYM
+      - MPROP
+    name: Opioids
+
+  Z_CAT_AMPHETAMINES:
+    expected:
+      - MAMPH
+    name: Amphetamines
+
+  Z_CAT_BENZODIAZEPINES:
+    expected:
+      - MBENZ
+    name: Benzodiazepines
+
+  Z_CAT_CANNABINOIDS:
+    expected:
+      - MMARI
+    name: Cannabinoids
+
+# Names of immunoassays - used when there's a false positive
+# on a screen and we need to add that to the interpretation
+screen_names:
+  UBNZQL: Benzodiazepines
+  UTHCQL: Cannabinoids
+  UAMTQL: Amphetamines
+  UOPIQL: Opioids
+  UTRAQL: Tramadol
+  UOXCQL: Oxycodone
+  UFENQL: Fentanyl
+  UMDNQL: Methadone
+  UQLMTD: Methadone
+  UQLOPI: Opioids
+  UQLCOC: Cocaine
+  UQLBZO: Benzodiazepines
+  UQLBAR: Barbiturates
+  UQLAMP: Amphetamine
+  UBUPQL: Buprenorphine
+
+# The code below is to handle a shift that occurred in the reported units for the
+# amphetamines, and benzodiazepines assays, during the study period.
+code_translations:
+  # AMPHETAMINES
+  UAMPHT:
+    target_code: UAMP
+    multiplier: 1000.0
+  UMAM:
+    target_code: UMA
+    multiplier: 1000.0
+  UMDMAM:
+    target_code: UMDMA
+    multiplier: 1000.0
+  URITA:
+    target_code: URITAL
+    multiplier: 1000.0
+  UPHENT:
+    target_code: UPHEN
+    multiplier: 1000.0
+  UMDAM:
+    target_code: UMDA
+    multiplier: 1000.0
+
+  # BENZODIAZEPINES
+  U7AC:
+    target_code: U7ACZ
+    multiplier: 1000.0
+  UTEMAZ:
+    target_code: UTEMZ
+    multiplier: 1000.0
+  ULORAZ:
+    target_code: ULORZ
+    multiplier: 1000.0
+  UAHAL:
+    target_code: UAHALP
+    multiplier: 1000.0
+  UAHTRI:
+    target_code: UAHTZM
+    multiplier: 1000.0
+  UNORD:
+    target_code: UNDAZ
+    multiplier: 1000.0
+  U7AF:
+    target_code: U7AFZ
+    multiplier: 1000.0
+  UOXA:
+    target_code: UOXAZ
+    multiplier: 1000.0
+  UDAF:
+    target_code: UDFRZ
+    multiplier: 1000.0
+  U2OHF:
+    target_code: U2FRZP
+    multiplier: 1000.0

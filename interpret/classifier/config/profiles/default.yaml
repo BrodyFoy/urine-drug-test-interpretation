@@ -1,0 +1,114 @@
+# this file contains strings that will be used
+# to generate the final interpretation
+#
+# This is configurable, to adapt interpretation text styling. 
+# Each ordering battery has logic to include/exclude mentions of certain substances
+# (e.g., in some patients we will mention alcohol use, others we won't, depending
+# on which test panel was ordered, regardless of if alcohol was tested for)
+#
+# Below this, we define mappings to text, depending on whether a substance was positive/negative,
+# whether it was prescribed/pharmaceutical or illicit, etc. 
+
+# use %SUBS% to reference the current substances, i.e. morphine, etc.
+# %SUBS% will be replaced with a joined list of substances like "morphine, fentanyl and codeine"
+
+# the name of the profile
+name: default
+
+# Some transfer names aren't brand names, so they shouldn't be
+# written as "...amphetamine (Lisdexamfetamine)..." but rather as "Lisdexamfetamine"
+transfer_name_non_brands:
+  - Lisdexamfetamine
+
+# includes: if the battery/package/test was ordered, regardless of expected status and positive/negative results, include the category in the interpretation
+# excludes:  if the battery/package/test was ordered and UEXPD expects this category, display a message warning the user the category was not tested for
+# codes here can be either battery or order codes
+code_overrides:
+  UPDRS2:
+    includes: []
+    excludes:
+      - Cannabinoids
+
+  UCPD1C:
+    includes:
+      - Opioids
+    excludes: []
+
+  UCPD2C:
+    includes:
+      - Alcohol
+      - Opioids
+    excludes: []
+
+  UCPD3C:
+    includes:
+      - Alcohol
+      - Opioids
+      - Benzodiazepines
+    excludes: []
+
+  UCPD4C:
+    includes:
+      - Opioids
+    excludes:
+      - Cannabinoids
+
+
+  UOPIAC:
+    includes:
+      - Opioids
+    excludes: []
+
+  UCETOH:
+    includes:
+      - Alcohol
+    excludes: []
+
+  UBNZC:
+    includes:
+      - Benzodiazepines
+    excludes: []
+
+  UAMPC:
+    includes:
+      - Amphetamines
+    excludes: []
+
+# used when no substances are detected
+no_substances_template: No eveidence for use of opioids or other substances.
+
+# used when the model detects an invalid sample
+invalid_template: This sample is invalid, further testing is recommended.
+
+# the mappings used to generate the interpretation
+# the order of these entries matters, it will define how they appear in the interpretation
+# i.e. since positive.expected_pharmaceutical appears first in this list, it will appear first in the interpretation
+# mappings in the result types (positive, negative, distant) will be concatenated using "and", i.e.
+# "These results are consistent with morphine therapy, there is evidence for use of methamphetamine and there is evidence for expected use of methadone"
+mappings:
+  positive:
+    expected_pharmaceutical:
+      template: these results are consistent with %SUBS% therapy
+    unexpected:
+      prefix: there is evidence for
+      template: the use of %SUBS%
+    expected:
+      prefix: there is evidence for
+      template: the expected use of %SUBS%
+  negative:
+    expected:
+      prefix: there is no
+      template: evidence for the use of %SUBS%
+    expected_not_in_battery:
+      template: please note that the ordered panel does not include testing for %SUBS%
+  false_positive:
+    false_positive:
+      template: please note that the %SUBS% immunoassay result was determined to be a false positive result based on more specific testing (mass spectrometry)
+  distant:
+    positive:
+      template: please note that there is a low concentration of %SUBS% metabolites below the limit of quantification, which is consistent with distant use of %SUBS% and likely explains the positive immunoassay result
+    negative:
+      template: please note that there is a minute amount of %SUBS% metabolites, below the limit of quantification of the confirmatory assay, which could reflect distant use of %SUBS%
+  interfering:
+    interfering:
+      template: An interfering substance precluded an evaluation for the use of %SUBS%
