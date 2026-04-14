@@ -18,7 +18,9 @@ Department of Laboratory Medicine & Pathology (2026).
 ## Installation
 
 ```bash
-pip install -r requirements.txt
+pip install -r interpret/requirements.txt
+
+pip install -r label/requirements.txt
 ```
 
 ---
